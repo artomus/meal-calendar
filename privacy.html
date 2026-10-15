@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101012">
+<title>Privacy Policy · FuelFlow</title>
+<style>
+:root{color-scheme:dark;--bg:#101012;--card:#1b1b1f;--line:#34343b;--text:#f6f5f4;--muted:#b5b3ba;--orange:#ff8d2b}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}main{max-width:760px;margin:0 auto;padding:46px 22px 70px}h1{font-size:clamp(30px,6vw,46px);line-height:1.1;margin:10px 0 14px}h2{font-size:20px;margin:30px 0 10px}p,li{color:#d8d5d6}ul{padding-left:22px}a{color:#ffab67}.top{display:flex;gap:12px;align-items:center;color:var(--muted);font-weight:700;letter-spacing:.3px}.symbol{width:34px;height:34px;display:grid;place-items:center;background:#292119;color:var(--orange);border-radius:10px;font-size:22px}.eyebrow{color:var(--orange);font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1.1px}.intro{font-size:18px;color:#e0dce0}.notice{padding:16px 19px;background:var(--card);border:1px solid var(--line);border-radius:15px;margin-top:23px}footer{border-top:1px solid var(--line);padding-top:18px;margin-top:40px;color:var(--muted);font-size:13px}
+</style>
+</head>
+<body><main>
+<div class="top"><span class="symbol">F</span><span>FuelFlow</span></div>
+<p class="eyebrow">Privacy Policy</p><h1>Your health data, your control.</h1>
+<p class="intro">FuelFlow is a personal meal and workout dashboard hosted at <a href="https://artomus.github.io/meal-calendar/">artomus.github.io/meal-calendar</a>. This policy explains its current operation and the planned WHOOP connection.</p>
+<div class="notice"><strong>Integration status:</strong> The WHOOP integration is under development. FuelFlow does not receive WHOOP data merely because you visit this page or create a WHOOP developer application.</div>
+<h2>Information used by FuelFlow</h2>
+<p>The existing calendar displays meal plans and scheduled workouts. If you choose to connect Hevy, FuelFlow requests completed workout information through its Cloudflare Worker using an access token you provide.</p>
+<p>If you later authorize WHOOP, FuelFlow is intended to request only the WHOOP permissions you approve. These may include sleep, recovery, physiological metrics such as heart rate and HRV, cycles and strain, workouts, and body measurements. Profile details would be accessed only if you authorize profile permission and the integration uses it.</p>
+<h2>How information is used</h2>
+<p>Connected fitness information is used to display your activity, training history, sleep, and recovery within the FuelFlow dashboard. It is not intended for advertising or sale.</p>
+<h2>Services involved</h2>
+<p>FuelFlow uses GitHub Pages to host its website. Its Hevy integration uses Cloudflare Workers to relay authorized requests to Hevy. A future WHOOP integration would use WHOOP's authorization and API services, with a Cloudflare backend handling the server-side connection. These services have their own privacy policies.</p>
+<h2>Access credentials and storage</h2>
+<p>Do not submit your WHOOP or Hevy passwords to FuelFlow. Authorized API credentials and tokens must be handled by the appropriate authentication flow. The exact storage and retention behavior of the planned WHOOP integration will be documented here before it is enabled. Browser-based saved Hevy access, where enabled, may keep its access token on the device; disconnect it on a device you no longer trust.</p>
+<h2>Sharing and retention</h2>
+<p>FuelFlow is being developed for personal use. It does not intentionally sell your fitness information or share it with advertisers. Authorized data necessarily passes through the relevant integration services to retrieve and display it. The WHOOP integration's storage and retention rules will be finalized and disclosed before activation.</p>
+<h2>Your choices</h2>
+<p>You can choose not to connect WHOOP or Hevy. Once WHOOP support is implemented, you will be able to revoke FuelFlow's access through your WHOOP connected-app controls. For questions about information stored by FuelFlow, or to request deletion of data controlled by FuelFlow, use the contact method below. Revoking an integration does not automatically delete records held by WHOOP or Hevy.</p>
+<h2>Contact</h2>
+<p>For privacy questions or removal requests, contact the FuelFlow project owner through <a href="https://github.com/artomus/meal-calendar/issues">the FuelFlow GitHub repository</a>. Do not include sensitive health information or access tokens in a public GitHub issue.</p>
+<h2>Changes</h2><p>This policy may be updated as FuelFlow adds integrations. Changes will appear on this page.</p>
+<footer>Last updated: October 15, 2026 · FuelFlow</footer>
+</main></body></html>
