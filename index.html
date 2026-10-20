@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>FuelFlow</title><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="FuelFlow"><meta name="theme-color" content="#0B0D12">
+<style>
+:root{color-scheme:dark;--bg:#0B0D12;--s1:#171B24;--s2:#202532;--tx:#F5F6FA;--mu:#9CA3B3;--or:#FF824D;--bd:rgba(255,255,255,.08);--p:#4C8DFF;--c:#FFC24D;--f:#A76BFF;--w:#35D0E8;--g:#3DDC97;--na:#FF6B9A;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit;min-width:0}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);font:15px/1.4 -apple-system,"SF Pro Text",Inter,system-ui,sans-serif;-webkit-tap-highlight-color:transparent}
+body{overflow-x:hidden}
+#app{height:100%;overflow-y:auto;overflow-x:hidden;padding:16px 16px calc(90px + env(safe-area-inset-bottom,0px))}
+h1{font-size:26px;margin:4px 0 14px}h2{font-size:13px;margin:0 0 10px;color:var(--mu);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.card{background:var(--s1);border:1px solid var(--bd);border-radius:20px;padding:16px;margin-bottom:14px;animation:in .35s ease both}
+@keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.big{font-size:34px;font-weight:700;letter-spacing:-.02em}.u{font-size:13px;color:var(--mu);margin-left:5px;font-weight:500}
+.row{display:flex;gap:10px;align-items:center;justify-content:space-between}.mu{color:var(--mu);font-size:13px}
+.bar{height:9px;border-radius:9px;background:var(--s2);overflow:hidden;margin-top:6px}.bar i{display:block;height:100%;border-radius:9px;transition:width .5s cubic-bezier(.2,.8,.2,1)}
+.mb{margin-bottom:13px}
+button,input,select{font:inherit;color:var(--tx)}
+input,select{width:100%;background:var(--s2);border:1px solid var(--bd);border-radius:12px;padding:11px 12px;outline:none}
+input:focus{border-color:var(--or)}
+.btn{background:var(--or);color:#1a0d05;border:0;border-radius:12px;padding:11px 16px;font-weight:700;cursor:pointer;transition:transform .1s}
+.btn:active,.chip:active{transform:scale(.95)}.btn.g{background:var(--s2);color:var(--tx)}.btn.d{background:#3a1d22;color:#ff8a8a}
+.chip{background:var(--s2);border:1px solid var(--bd);border-radius:999px;padding:9px 14px;cursor:pointer;white-space:nowrap}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.item{display:flex;justify-content:space-between;gap:10px;padding:11px 0;border-top:1px solid var(--bd);cursor:pointer}
+.item:first-of-type{border-top:0}.item b{font-weight:600}
+nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:rgba(23,27,36,.92);backdrop-filter:blur(16px);border-top:1px solid var(--bd);padding:8px 6px calc(8px + env(safe-area-inset-bottom,0px));z-index:5}
+nav button{flex:1;background:none;border:0;color:var(--mu);display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;cursor:pointer}
+nav svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+nav button.on{color:var(--or)}
+#sheetbg{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:flex-end;z-index:9}
+#sheetbg.on{display:flex}
+#sheet{width:100%;max-height:88%;overflow-y:auto;background:var(--s1);border-radius:24px 24px 0 0;padding:18px 16px calc(24px + env(safe-area-inset-bottom,0px));animation:up .25s ease}
+@keyframes up{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
+.g2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;align-items:end}.mt{margin-top:10px}
+label{display:block;font-size:12px;color:var(--mu);margin:10px 0 4px}
+.empty{color:var(--mu);text-align:center;padding:18px 6px}
+.ok{color:var(--g)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media (min-width:700px){#app{max-width:640px;margin:0 auto}nav{justify-content:center}nav button{max-width:110px}}
+input,select{height:44px;display:block;max-width:100%}
+input[type=date]{-webkit-appearance:none;appearance:none;min-width:0;line-height:20px}
+input[type=date]::-webkit-date-and-time-value{text-align:left;min-height:1.2em}
+nav button{font-size:10px}nav svg{width:22px;height:22px}
+summary{cursor:pointer;font-weight:600;list-style:none}summary::-webkit-details-marker{display:none}summary::after{content:" ›";color:var(--mu)}details[open]>summary::after{content:" ⌄"}
+details>summary+*{margin-top:10px}
+.cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}.dw{text-align:center;font-size:11px;color:var(--mu)}
+.cd{background:var(--s2);border:1px solid transparent;border-radius:10px;padding:4px 2px;min-height:58px;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;font-size:13px}
+.cd.off{opacity:.25;pointer-events:none}.cd.pl{background:#2a2430}.cd.sel{border-color:var(--or)}.cd.td b{color:var(--or)}
+.cd small{font-size:9px;color:var(--mu);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dots{display:flex;gap:3px;min-height:6px}.dots i{width:6px;height:6px;border-radius:50%}
+</style></head><body>
+<div id="app"></div>
+<nav id="nav"></nav>
+<div id="sheetbg" onclick="if(event.target===this)closeS()"><div id="sheet"></div></div>
+<script>
+// ---------- data ----------
+// [name, JP name, kcal, protein, carbs, fat, fiber, sodium mg] per 100 g (approx, USDA/MEXT-style; null = unknown)
+const DB=[["Milk, whole","牛乳 ぎゅうにゅう",61,3.2,4.8,3.3,0,43],["Milk, low-fat","低脂肪乳",46,3.8,5.5,1,0,51],["Banana","バナナ",89,1.1,22.8,.3,2.6,1],["Chicken breast, raw","鶏むね肉",120,22.5,0,2.6,0,45],["Chicken thigh, raw","鶏もも肉",145,17,0,8,0,75],["Ground beef, lean raw","牛ひき肉 赤身",137,21,0,5.5,0,66],["Beef sirloin, raw","サーロイン",250,17,0,20,0,55],["Pork loin, raw","豚ロース",263,19,0,19.2,0,50],["Egg, whole","卵 たまご",143,12.6,.7,9.5,0,142],["Rice, cooked white","ごはん 白米",156,2.5,37.1,.3,.3,1],["Rice, raw white","米",358,6.1,77.6,.9,.5,1],["Oats, rolled dry","オートミール",379,13.2,67.7,6.5,10.1,6],["Sweet potato, raw","さつまいも",86,1.6,20.1,.1,3,55],["Potato, raw","じゃがいも",77,2,17.5,.1,2.2,6],["Onion, raw","玉ねぎ",40,1.1,9.3,.1,1.7,4],["Greek yogurt, plain","ギリシャヨーグルト",97,9,3.9,5,0,35],["Yogurt, plain","ヨーグルト",62,3.6,4.9,3,0,48],["Cream cheese","クリームチーズ",342,6,4.1,34,0,321],["Cheddar cheese","チーズ",403,25,1.3,33,0,621],["Tofu, firm","豆腐",72,6.6,1.6,4.2,.3,7],["Natto","納豆",200,16.5,12.1,10,6.7,2],["Salmon, raw","鮭 サーモン",142,19.8,0,6.3,0,44],["Tuna, canned in water","ツナ缶",116,25.5,0,.8,0,247],["Bread, white","食パン",266,9,49,3.2,2.7,490],["Pasta, cooked","パスタ",158,5.8,30.9,.9,1.8,1],["Broccoli, raw","ブロッコリー",34,2.8,6.6,.4,2.6,33],["Spinach, raw","ほうれん草",23,2.9,3.6,.4,2.2,79],["Tomato, raw","トマト",18,.9,3.9,.2,1.2,5],["Apple, raw","りんご",52,.3,13.8,.2,2.4,1],["Orange","みかん オレンジ",47,.9,11.8,.1,2.4,0],["Avocado","アボカド",160,2,8.5,14.7,6.7,7],["Almonds","アーモンド",579,21.2,21.6,49.9,12.5,1],["Peanut butter","ピーナッツバター",588,25,20,50,6,426],["Olive oil","オリーブオイル",884,0,0,100,0,2],["Butter","バター",717,.9,.1,81.1,0,643],["Whey protein powder (generic)","ホエイプロテイン SAVAS",400,80,8,6,null,null],["Oikos Greek yogurt (generic)","オイコス",70,9.5,5,.1,null,null],["Meiji milk (generic)","明治 おいしい牛乳",67,3.4,4.8,3.8,null,50]]
+.map(r=>({id:"db"+r[0],name:r[0],jp:r[1],src:"Built-in (approx.)",k:r[2],p:r[3],c:r[4],f:r[5],fi:r[6],na:r[7]}));
+const MEALS=["Breakfast","Lunch","Dinner","Snacks"];
+const D={goals:{k:2000,p:110,c:230,f:70,w:2500},food:[],water:[],weight:[],custom:[],w_q:[100,250,500],cfg:{url:"https://hevy-calendar-sync.verkeenkoartem.workers.dev",token:""},hevy:[],whoop:null};
+let S=load();let tab="home";let date=today();let sh=null;
+function today(){return new Date().toLocaleDateString("sv")}
+function load(){try{const x=JSON.parse(localStorage.getItem("fuelflow.v1"));return x?Object.assign({},D,x):JSON.parse(JSON.stringify(D))}catch(e){return JSON.parse(JSON.stringify(D))}}
+let memOnly=false;
+function save(){try{localStorage.setItem("fuelflow.v1",JSON.stringify(S))}catch(e){memOnly=true}render()}
+const uid=()=>Math.random().toString(36).slice(2,10);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const r0=n=>Math.round(n).toLocaleString();const r1=n=>(Math.round(n*10)/10).toLocaleString();
+// ---------- calculations (single source of truth) ----------
+function nut(e){const m=e.g/100;const o={k:e.k*m,p:e.p*m,c:e.c*m,f:e.f*m};o.fi=e.fi==null?null:e.fi*m;o.na=e.na==null?null:e.na*m;return o}
+function totals(d){const t={k:0,p:0,c:0,f:0,fi:0,na:0,fiMiss:0,naMiss:0,n:0};
+ S.food.filter(e=>e.date===d).forEach(e=>{const n=nut(e);t.n++;["k","p","c","f"].forEach(x=>t[x]+=n[x]);
+ if(n.fi==null)t.fiMiss++;else t.fi+=n.fi;if(n.na==null)t.naMiss++;else t.na+=n.na});return t}
+const waterTot=d=>S.water.filter(w=>w.date===d).reduce((a,w)=>a+w.ml,0);
+// ---------- UI pieces ----------
+function bar(label,v,goal,unit,col){const has=goal>0;const pct=has?Math.min(100,v/goal*100):0;
+ return `<div class="mb"><div class="row"><span>${label}</span><span><b>${r1(v)}</b>${has?` / ${r0(goal)}`:""}<span class="u">${unit}</span>${has?`<span class="u">${Math.round(v/goal*100)}%</span>`:`<span class="u">no goal set</span>`}</span></div><div class="bar" role="progressbar" aria-valuenow="${Math.round(pct)}" aria-valuemin="0" aria-valuemax="100"><i style="width:${pct}%;background:${col}"></i></div></div>`}
+function ring(v,goal){const R=54,C=2*Math.PI*R;const pct=goal>0?Math.min(1,v/goal):0;
+ return `<svg viewBox="0 0 130 130" width="130" height="130" style="flex:none"><circle cx="65" cy="65" r="${R}" fill="none" stroke="var(--s2)" stroke-width="12"/><circle cx="65" cy="65" r="${R}" fill="none" stroke="var(--or)" stroke-width="12" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C*(1-pct)}" transform="rotate(-90 65 65)" style="transition:stroke-dashoffset .6s ease"/><text x="65" y="71" text-anchor="middle" fill="#F5F6FA" font-size="22" font-weight="700">${goal>0?Math.round(v/goal*100)+"%":"—"}</text></svg>`}
+function dateBar(){return `<div class="row mb"><button class="chip" onclick="shift(-1)">‹</button><input type="date" value="${date}" onchange="date=this.value||today();render()" style="text-align:center;max-width:170px"><button class="chip" onclick="shift(1)">›</button></div>`}
+function shift(n){const d=new Date(date+"T12:00:00");d.setDate(d.getDate()+n);date=d.toLocaleDateString("sv");render()}
+function weightChart(){const pts=[...S.weight].sort((a,b)=>a.date<b.date?-1:1);
+ if(!pts.length)return `<div class="empty">No measurements yet. Log your first weight below.</div>`;
+ const W=320,H=170,P=28;const ws=pts.map(p=>p.kg);let lo=Math.min(...ws),hi=Math.max(...ws);if(hi-lo<1){lo-=.5;hi+=.5}
+ const t0=new Date(pts[0].date).getTime(),t1=new Date(pts[pts.length-1].date).getTime();
+ const X=p=>pts.length===1||t1===t0?W/2:P+(new Date(p.date).getTime()-t0)/(t1-t0)*(W-2*P);
+ const Y=p=>H-P-(p.kg-lo)/(hi-lo)*(H-2*P);
+ const line=pts.length>1?`<polyline fill="none" stroke="var(--or)" stroke-width="2.5" stroke-linejoin="round" points="${pts.map(p=>X(p)+","+Y(p)).join(" ")}"/>`:"";
+ const dots=pts.map(p=>`<circle cx="${X(p)}" cy="${Y(p)}" r="5" fill="var(--or)"><title>${p.date}: ${p.kg} kg</title></circle>`).join("");
+ return `<svg viewBox="0 0 ${W} ${H}" width="100%" style="display:block"><text x="4" y="${P}" fill="#9CA3B3" font-size="10">${hi.toFixed(1)}</text><text x="4" y="${H-P+4}" fill="#9CA3B3" font-size="10">${lo.toFixed(1)}</text><text x="${P}" y="${H-6}" fill="#9CA3B3" font-size="10">${pts[0].date.slice(5)}</text><text x="${W-P}" y="${H-6}" text-anchor="end" fill="#9CA3B3" font-size="10">${pts[pts.length-1].date.slice(5)}</text>${line}${dots}</svg>`}
+// ---------- screens ----------
+const V={};
+V.home=()=>{const t=totals(date),g=S.goals,w=waterTot(date);const lw=[...S.weight].sort((a,b)=>a.date<b.date?1:-1)[0];
+ return `<h1>FuelFlow</h1>${dateBar()}
+<div class="card"><h2>Daily nutrition</h2><div class="row" style="gap:16px">${ring(t.k,g.k)}<div style="flex:1"><div class="big">${r0(t.k)}<span class="u">kcal logged</span></div><div class="mu">${g.k>0?`Reference ${r0(g.k)} kcal · ${t.k<=g.k?r0(g.k-t.k)+" kcal remaining":r0(t.k-g.k)+" kcal above reference"}`:"No calorie reference set"}</div><button class="btn mt" onclick="tab='food';render()">Log food</button></div></div></div>
+<div class="card"><h2>Macros</h2>${bar("Protein",t.p,g.p,"g","var(--p)")}${bar("Carbs",t.c,g.c,"g","var(--c)")}${bar("Fat",t.f,g.f,"g","var(--f)")}
+<div class="mu">Fiber ${t.fiMiss==t.n&&t.n?"unknown":r1(t.fi)+" g"} · Sodium ${t.naMiss==t.n&&t.n?"unknown":r0(t.na)+" mg"}${t.fiMiss+t.naMiss?" (some foods lack data; missing ≠ zero)":""}</div></div>
+<div class="card"><h2>Hydration</h2>${bar("Water",w,g.w,"mL","var(--w)")}<div class="chips">${S.w_q.map(a=>`<button class="chip" onclick="addW(${a})">+${a} mL</button>`).join("")}</div></div>
+<div class="card"><h2>Weight</h2><div class="big">${lw?lw.kg:"—"}<span class="u">kg${lw?" · "+lw.date:""}</span></div></div>
+<div class="card"><h2>Energy balance</h2><div class="mu">WHOOP expenditure isn't connected in this build, so no energy difference is shown. Nothing is estimated or invented.</div></div>`};
+V.food=()=>{const t=totals(date);
+ return `<h1>Food</h1>${dateBar()}<div class="card"><div class="row"><span class="big">${r0(t.k)}<span class="u">kcal</span></span><span class="mu">P ${r0(t.p)} · C ${r0(t.c)} · F ${r0(t.f)} g</span></div></div>`+
+ MEALS.map(m=>{const es=S.food.filter(e=>e.date===date&&e.meal===m);
+ return `<div class="card"><div class="row"><h2 style="margin:0">${m}</h2><button class="chip" onclick="openAdd('${m}')">+ Add</button></div>${es.length?es.map(e=>{const n=nut(e);return `<div class="item" onclick="openEdit('${e.id}')"><div><b>${esc(e.name)}</b><div class="mu">${r1(e.g)} g</div></div><div style="text-align:right"><b>${r0(n.k)}</b><span class="u">kcal</span><div class="mu">P ${r1(n.p)} · C ${r1(n.c)} · F ${r1(n.f)}</div></div></div>`}).join(""):`<div class="mu mt">Nothing logged.</div>`}</div>`}).join("")+
+ `<div class="card"><h2>Scan</h2><div class="chips"><button class="btn" onclick="openScan()">Scan barcode</button><button class="btn g" onclick="openLabel()">Scan label</button></div></div>`};
+V.water=()=>{const w=waterTot(date),es=S.water.filter(x=>x.date===date).sort((a,b)=>a.t<b.t?1:-1);
+ return `<h1>Water</h1>${dateBar()}<div class="card"><div class="big">${r0(w)}<span class="u">mL</span></div>${bar("Daily goal",w,S.goals.w,"mL","var(--w)")}
+<div class="chips">${S.w_q.map(a=>`<button class="chip" onclick="addW(${a})">+${a} mL</button>`).join("")}</div>
+<label>Custom amount (mL)</label><div class="row"><input id="cw" type="number" inputmode="numeric" placeholder="e.g. 330"><button class="btn" onclick="addW(+cw.value)">Add</button></div></div>
+<div class="card"><h2>History</h2>${es.length?es.map(x=>`<div class="item" onclick="openW('${x.id}')"><span>${x.t} · Water</span><b>${r0(x.ml)}<span class="u">mL</span></b></div>`).join(""):`<div class="empty">No drinks logged this day.</div>`}</div>`};
+V.progress=()=>{const ws=[...S.weight].sort((a,b)=>a.date<b.date?1:-1);
+ return `<h1>Progress</h1><div class="card"><h2>Weight</h2>${weightChart()}</div>
+<div class="card"><h2>Log measurement</h2><div class="g2"><div><label>Date</label><input id="wd" type="date" value="${today()}"></div><div><label>Weight (kg)</label><input id="wk" type="number" step="0.1" inputmode="decimal" placeholder="0.0"></div></div><div id="werr" class="mu" style="color:#ff8a8a"></div><button class="btn mt" onclick="saveWeight()">Save measurement</button><div class="mu mt">Saving on an existing date replaces that day's value.</div></div>
+<div class="card"><h2>History</h2>${ws.length?ws.map(x=>`<div class="item" onclick="delWeight('${x.id}')"><span>${x.date}</span><span><b>${x.kg}</b><span class="u">kg · tap to delete</span></span></div>`).join(""):`<div class="empty">No history.</div>`}</div>`};
+V.settings=()=>{const g=S.goals;const f=(k,l,u)=>`<label>${l} (${u})</label><input type="number" inputmode="decimal" value="${g[k]||""}" placeholder="No goal" onchange="setG('${k}',this.value)">`;
+ return `<h1>Settings</h1><div class="card"><h2>Goals (optional)</h2><div class="g2"><div>${f("k","Calorie reference","kcal")}</div><div>${f("w","Water","mL")}</div><div>${f("p","Protein","g")}</div><div>${f("c","Carbs","g")}</div><div>${f("f","Fat","g")}</div></div><div class="mu mt">Calorie reference is a personal reference, not medical advice. Leave blank to turn a goal off.</div></div>
+<div class="card"><h2>Quick-add water (mL)</h2><input value="${S.w_q.join(", ")}" onchange="S.w_q=this.value.split(',').map(Number).filter(x=>x>0).slice(0,5);save()"></div>
+<div class="card"><h2>Data</h2><div class="chips"><button class="btn g" onclick="exp()">Export JSON</button><button class="btn g" onclick="openImp()">Import JSON</button><button class="btn d" onclick="wipe()">Delete all</button></div><div class="mu mt">${memOnly?"⚠ Browser storage is unavailable here; data lasts only for this session. Export a backup.":"Saved in this browser (localStorage)."}</div></div>
+<div class="card"><h2>Hevy & WHOOP (your Worker)</h2><label>Worker URL</label><input value="${esc(S.cfg.url)}" onchange="S.cfg.url=this.value.trim();save()"><label>Access token (stays on this device; never exported)</label><input type="password" value="${esc(S.cfg.token)}" placeholder="Bearer token" onchange="S.cfg.token=this.value.trim();save()"><div class="chips mt"><button class="btn" onclick="syncHevy()">Sync Hevy</button><button class="btn g" onclick="whoopCheck()">Check WHOOP</button><a class="chip" style="text-decoration:none;color:inherit" target="_blank" href="${esc(S.cfg.url)}/whoop/connect">Connect WHOOP</a></div><div class="mu mt">${esc(hs)||(S.hevy.length?S.hevy.length+" workouts cached":"Not synced yet.")}</div></div>`};
+// ---------- actions ----------
+function addW(ml){ml=Math.round(ml);if(!(ml>0&&ml<=5000))return;S.water.push({id:uid(),date,ml,t:new Date().toTimeString().slice(0,5)});save()}
+function setG(k,v){S.goals[k]=Math.max(0,parseFloat(v)||0);save()}
+function saveWeight(){const d=wd.value,k=parseFloat(wk.value);if(!d||!(k>20&&k<400)){werr.textContent="Enter a valid date and a weight between 20 and 400 kg.";return}
+ const ex=S.weight.find(x=>x.date===d);if(ex)ex.kg=k;else S.weight.push({id:uid(),date:d,kg:k});save()}
+function delWeight(id){if(confirm("Delete this measurement?")){S.weight=S.weight.filter(x=>x.id!==id);save()}}
+function openS(h){sheet.innerHTML=h;sheetbg.classList.add("on")}function closeS(){stopScan();sheetbg.classList.remove("on")}
+function allFoods(){return [...S.custom.map(c=>({...c,src:"My foods"})),...DB]}
+function openAdd(m){sh={meal:m};openS(`<h1 style="font-size:20px">Add to ${m}</h1><input id="q" placeholder="Search (English / 日本語)" oninput="doSearch()" autofocus><div id="res"></div><div class="chips mt"><button class="chip" onclick="webSearch()">Search online</button><button class="chip" onclick="openScan('${m}')">Barcode</button><button class="chip" onclick="openLabel('${m}')">Label</button><button class="chip" onclick="openCustom()">+ Custom</button></div>`);doSearch()}
+function doSearch(){const q=(document.getElementById("q").value||"").trim().toLowerCase();const all=allFoods();
+ const r=(q?all.filter(f=>(f.name+" "+(f.jp||"")+" "+(f.brand||"")+" "+(f.barcode||"")).toLowerCase().includes(q)):all.slice(0,12)).slice(0,30);
+ document.getElementById("res").innerHTML=r.length?r.map(f=>`<div class="item" onclick="pick('${f.id}')"><div><b>${esc(f.name)}</b><div class="mu">${esc(f.jp||f.brand||"")} · ${esc(f.src)}</div></div><div style="text-align:right"><b>${r0(f.k)}</b><span class="u">kcal/100 g</span></div></div>`).join(""):`<div class="empty">No results for “${esc(q)}”. Create it as a custom food below.</div>`}
+function pick(id){const f=allFoods().find(x=>x.id===id);sh.food=f;openS(`<h1 style="font-size:20px">${esc(f.name)}</h1><div class="mu">${esc(f.src)} · per 100 g: ${f.k} kcal, P ${f.p}, C ${f.c}, F ${f.f}${f.fi==null?" · fiber/sodium unknown":""}</div><label>Amount (g)</label><input id="gr" type="number" inputmode="decimal" value="100" oninput="prev()"><label>Meal</label><select id="ml">${MEALS.map(m=>`<option ${m==sh.meal?"selected":""}>${m}</option>`).join("")}</select><div id="pv" class="card mt"></div><button class="btn" style="width:100%" onclick="addFood()">Add to diary</button>`);prev()}
+function prev(){const g=parseFloat(gr.value)||0,n=nut({...sh.food,g});pv.innerHTML=`<b>${r0(n.k)}</b><span class="u">kcal</span> · P ${r1(n.p)} · C ${r1(n.c)} · F ${r1(n.f)} g`}
+function addFood(){const g=parseFloat(gr.value);if(!(g>0&&g<=10000)){alert("Enter an amount in grams.");return}const f=sh.food;
+ S.food.push({id:uid(),date,meal:ml.value,name:f.name,g,k:f.k,p:f.p,c:f.c,f:f.f,fi:f.fi==null?null:f.fi,na:f.na==null?null:f.na});closeS();save()}
+function openEdit(id){const e=S.food.find(x=>x.id===id);sh={id};openS(`<h1 style="font-size:20px">${esc(e.name)}</h1><label>Amount (g)</label><input id="gr" type="number" inputmode="decimal" value="${e.g}"><label>Meal</label><select id="ml">${MEALS.map(m=>`<option ${m==e.meal?"selected":""}>${m}</option>`).join("")}</select><label>Date</label><input id="ed" type="date" value="${e.date}"><div class="chips mt"><button class="btn" onclick="saveEdit()">Save</button><button class="btn g" onclick="dupe()">Duplicate</button><button class="btn d" onclick="delFood()">Delete</button></div>`)}
+function saveEdit(){const e=S.food.find(x=>x.id===sh.id),g=parseFloat(gr.value);if(!(g>0))return alert("Enter a valid amount.");e.g=g;e.meal=ml.value;e.date=ed.value||e.date;closeS();save()}
+function dupe(){const e=S.food.find(x=>x.id===sh.id);S.food.push({...e,id:uid()});closeS();save()}
+function delFood(){S.food=S.food.filter(x=>x.id!==sh.id);closeS();save()}
+function openCustom0(){openS(`<h1 style="font-size:20px">Custom food</h1><label>Name</label><input id="cn"><label>Brand (optional)</label><input id="cb"><label>Barcode (optional)</label><input id="cbc" inputmode="numeric"><div class="mu mt">Nutrition per 100 g</div><div class="g2"><div><label>kcal</label><input id="ck" type="number" inputmode="decimal"></div><div><label>Protein g</label><input id="cp" type="number" inputmode="decimal"></div><div><label>Carbs g</label><input id="cc" type="number" inputmode="decimal"></div><div><label>Fat g</label><input id="cf" type="number" inputmode="decimal"></div><div><label>Fiber g (optional)</label><input id="cfi" type="number" inputmode="decimal"></div><div><label>Sodium mg (optional)</label><input id="cna" type="number" inputmode="decimal"></div></div><div class="mu mt">Label shows salt equivalent? Sodium mg ≈ salt g × 393.4.</div><button class="btn mt" style="width:100%" onclick="saveCustom()">Save food</button>`)}
+function saveCustom(){const n=cn.value.trim(),k=parseFloat(ck.value);if(!n||isNaN(k))return alert("Name and calories are required.");const o=v=>v===""?null:parseFloat(v);
+ const f={id:"c"+uid(),name:n,brand:cb.value.trim(),barcode:cbc.value.trim(),k,p:o(cp.value)||0,c:o(cc.value)||0,f:o(cf.value)||0,fi:o(cfi.value),na:o(cna.value)};S.custom.push(f);const m=sh.meal;save();sh={meal:m};pick(f.id)}
+function openW(id){const x=S.water.find(w=>w.id===id);sh={id};openS(`<h1 style="font-size:20px">Edit drink</h1><label>Volume (mL)</label><input id="wv" type="number" inputmode="numeric" value="${x.ml}"><div class="chips mt"><button class="btn" onclick="const v=+wv.value;if(v>0){S.water.find(w=>w.id===sh.id).ml=v;closeS();save()}">Save</button><button class="btn d" onclick="S.water=S.water.filter(w=>w.id!==sh.id);closeS();save()">Delete</button></div>`)}
+function exp(){const b=new Blob([JSON.stringify({...S,cfg:{...S.cfg,token:""}},null,1)],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="fuelflow-backup-"+today()+".json";a.click()}
+function openImp(){openS(`<h1 style="font-size:20px">Import backup</h1><div class="mu">Paste exported JSON. Existing records with the same id are kept once.</div><textarea id="ij" style="width:100%;height:140px;background:var(--s2);color:#fff;border:1px solid var(--bd);border-radius:12px;margin-top:10px"></textarea><button class="btn mt" onclick="doImp()">Import</button>`)}
+function doImp(){try{const x=JSON.parse(ij.value);if(!x||typeof x!=="object"||!x.goals)throw 0;
+ ["food","water","weight","custom"].forEach(k=>{const ids=new Set(S[k].map(a=>a.id));(x[k]||[]).forEach(a=>{if(a&&a.id&&!ids.has(a.id))S[k].push(a)})});Object.assign(S.goals,x.goals);closeS();save()}catch(e){alert("That doesn't look like a valid FuelFlow backup.")}}
+function wipe(){if(confirm("Delete ALL FuelFlow data on this device?")){S=JSON.parse(JSON.stringify(D));save()}}
+
+// ---------- calendar plan (from FuelFlow_Full_Calendar_Oct14-Nov10_2026.docx; plan estimates, NOT intake) ----------
+const TP={H1:[443,"Hercules kasha: 75 g dry oats, 110 g whole milk, 35 g dried apricots; no water",15,75,10],H2:[469,"Hercules kasha: 80 g dry oats, 120 g whole milk, 35 g dried apricots; no water",16,79,10],H3:[457,"Hercules kasha: 80 g dry oats, 120 g whole milk, 30 g dried apricots; no water",16,76,10],
+S1:[496,"Semolina kasha: 250 mL milk, 25 g semolina, 4 g butter, 10 g sugar, 1 g salt; plus 3 boiled eggs (150 g edible)",29,40,25],S2:[337,"Semolina kasha: 250 mL milk, 25 g semolina, 4 g butter, 10 g sugar, 1 g salt; plus 90 g fat-free Greek yogurt",19,43,10],
+E1:[500,"2 boiled eggs (100 g edible), 100 g whole-grain bread, 120 g banana",23,70,15],
+Y1:[395,"210 g fat-free Greek yogurt, 80 g whole-grain toast, 150 g berries",30,58,4],Y2:[351,"200 g fat-free Greek yogurt, 65 g whole-grain toast, 150 g berries",27,51,3],Y3:[389,"200 g fat-free Greek yogurt, 80 g whole-grain toast, 150 g berries",29,58,4],Y4:[322,"150 g fat-free Greek yogurt, 65 g whole-grain toast, 150 g berries",22,49,3],
+B:[105,"120 g banana",1,27,0],
+D1:[753,"170 g cooked lean steak, 320 g baked sweet potato, 150 g cucumber/tomato salad",51,93,18],D2:[696,"100 g dry pasta, 150 g cooked skinless chicken breast, 190 g tomato sauce",61,86,8],D3:[738,"150 g cooked skinless chicken breast, 260 g cooked rice, 150 g carrots/bell peppers, 10 g olive oil",55,88,16],
+D4:[745,"200 g raw beef mince (9% fat), 30 g onion, 300 g baked sweet potato, 100 g carrots; no oil",48,100,18],D5:[678,"200 g raw beef mince (9% fat), 30 g onion, 225 g baked sweet potato, 100 g carrots; no oil",47,85,18],
+D6:[722,"150 g cooked skinless chicken breast, 240 g cooked rice, 180 g carrots/bell peppers, 10 g olive oil",54,85,16],D7:[835,"150 g cooked chicken breast, 335 g cooked rice, 150 g carrots/bell peppers, 10 g olive oil (rice includes the extra 75 g)"],
+L1:[577,"150 g cooked skinless chicken breast, 170 g cooked rice, 150 g carrots/bell peppers, 5 g olive oil",52,63,11],
+FX:[null,"Flexible: choose and log ingredients. Lunch + dinner share a combined 1,095 kcal allowance (planning figure, not intake)"]};
+const SL={b:"Breakfast",l:"Lunch",s:"School lunch",p:"Pre-workout",a:"Afternoon snack (no gym)",f:"Before football",d:"Dinner"};
+const FXN="Lunch and dinner are flexible; 1,095 kcal is a combined allocation, not logged intake.";
+const PL=`10-14|Pull + Zone 2|1696|b:H1,l:Y1,p:B,d:D1|School break: lunch is at home.
+10-15|Legs|1648|b:S1,l:Y2,p:B,d:D2|School break: lunch is at home.
+10-16|Upper (strength only)|1701|b:H2,p:B,l:Y3,d:D3|School-free Friday, no Zone 2. Bread calories are approximate; check package labels.
+10-17|Rest · away|1700|b:E1,l:FX,a:B,d:FX|Away from Nagoya: rest day. The 1,700 kcal is a planning allocation, not confirmed intake.
+10-18|Rest · away|1696|b:S2,l:L1,a:B,d:D5|Away from Nagoya: rest day, banana is an afternoon snack.
+10-19|Lower + Zone 2|1696|b:H3,p:B,l:Y3,d:D4|No school Monday. Earlier rest-day macro totals no longer apply.
+10-20|Push|1650|b:E1,s:Y4,p:B,d:D6|
+10-21|Pull + Zone 2|1696|b:H1,s:Y1,p:B,d:D1|
+10-22|Legs|1648|b:S1,s:Y2,p:B,d:D2|
+10-23|Rest|1596|b:H2,s:Y3,d:D3|
+10-24|Upper + Zone 2|1700|b:E1,l:FX,p:B,d:FX|${FXN}
+10-25|Lower + Zone 2|1696|b:S2,l:L1,p:B,d:D5|
+10-26|Rest|1591|b:H3,l:Y3,d:D4|
+10-27|Push|1650|b:E1,s:Y4,p:B,d:D6|
+10-28|Pull + Zone 2|1696|b:H1,s:Y1,p:B,d:D1|
+10-29|Legs|1648|b:S1,s:Y2,p:B,d:D2|
+10-30|Football club|1798|b:H2,s:Y3,f:B,d:D7|Updated meal amounts; macro totals were not provided.
+10-31|Upper + Zone 2|1700|b:E1,l:FX,p:B,d:FX|${FXN}
+11-01|Lower + Zone 2|1696|b:S2,l:L1,p:B,d:D5|
+11-02|Rest|1591|b:H3,l:Y3,d:D4|
+11-03|Push|1650|b:E1,s:Y4,p:B,d:D6|
+11-04|Pull + Zone 2|1696|b:H1,s:Y1,p:B,d:D1|
+11-05|Legs|1648|b:S1,s:Y2,p:B,d:D2|
+11-06|Football club|1798|b:H2,s:Y3,f:B,d:D7|Updated meal amounts; macro totals were not provided.
+11-07|Upper + Zone 2|1700|b:E1,l:FX,p:B,d:FX|${FXN}
+11-08|Lower + Zone 2|1696|b:S2,l:L1,p:B,d:D5|
+11-09|Rest|1591|b:H3,l:Y3,d:D4|
+11-10|Push|1650|b:E1,s:Y4,p:B,d:D6|`;
+const PLAN={};PL.split("\n").forEach(l=>{const[d,act,k,m,n]=l.split("|");PLAN["2026-"+d]={act,k:+k,meals:m.split(",").map(x=>x.split(":")),n}});
+let cm=today().slice(0,7),hs="";
+// ---------- Hevy / WHOOP via your Cloudflare Worker ----------
+async function api(path){const c=S.cfg;if(!c.token)throw new Error("Add your access token in Settings first.");
+ const r=await fetch(c.url.replace(/\/$/,"")+path,{headers:{Authorization:"Bearer "+c.token}});if(!r.ok)throw new Error("Worker answered HTTP "+r.status);return r.json()}
+function normW(w){const st=w.start_time||w.startTime,en=w.end_time||w.endTime;let vol=0;
+ const ex=(w.exercises||[]).map(e=>({t:e.title||e.name||"Exercise",n:e.notes||"",s:(e.sets||[]).map(x=>{vol+=(x.weight_kg||0)*(x.reps||0);return[x.reps,x.weight_kg,x.type]})}));
+ return{id:w.id||st,title:w.title||w.name||"Workout",date:new Date(st).toLocaleDateString("sv",{timeZone:"Asia/Tokyo"}),time:new Date(st).toLocaleTimeString("en-GB",{timeZone:"Asia/Tokyo",hour:"2-digit",minute:"2-digit"}),mins:en?Math.round((new Date(en)-new Date(st))/6e4):null,ex,vol}}
+async function syncHevy(){hs="Syncing Hevy…";render();try{let all=[];let j=await api("/workouts");const get=x=>Array.isArray(x)?x:(x.workouts||[]);all=get(j);
+ const pc=j.page_count||0;for(let pg=2;pg<=Math.min(pc,20);pg++){try{all=all.concat(get(await api("/workouts?page="+pg)))}catch(e){break}}
+ const m=new Map(S.hevy.map(w=>[w.id,w]));all.map(normW).filter(w=>w.date&&w.date!=="Invalid Date").forEach(w=>m.set(w.id,w));S.hevy=[...m.values()];
+ hs="Hevy synced: "+all.length+" workouts fetched at "+new Date().toTimeString().slice(0,5)}catch(e){hs="Hevy sync failed: "+e.message+" (the preview page can't reach your Worker; use your GitHub Pages copy)"}save()}
+async function whoopCheck(){hs="Checking WHOOP…";render();try{const st=await api("/whoop/status");let d=null,de="";try{d=await api("/whoop/data")}catch(e){de=e.message}
+ S.whoop={at:new Date().toISOString(),status:st,data:d,err:de};hs="WHOOP response received "+new Date().toTimeString().slice(0,5)}catch(e){hs="WHOOP check failed: "+e.message}save()}
+// ---------- calendar view ----------
+function mshift(n){const[y,m]=cm.split("-").map(Number);const d=new Date(y,m-1+n,1);cm=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0");render()}
+V.calendar=()=>{const[Y,M]=cm.split("-").map(Number);const off=(new Date(Y,M-1,1).getDay()+6)%7,dim=new Date(Y,M,0).getDate();let c="";
+ for(let i=0;i<off;i++)c+=`<div></div>`;
+ for(let d=1;d<=dim;d++){const k=cm+"-"+String(d).padStart(2,"0"),p=PLAN[k];const dots=[];
+  if(p&&!/^Rest/.test(p.act))dots.push("var(--or)");if(S.food.some(e=>e.date===k))dots.push("var(--g)");if(S.water.some(e=>e.date===k))dots.push("var(--w)");if(S.hevy.some(e=>e.date===k))dots.push("#fff");if(S.weight.some(e=>e.date===k))dots.push("var(--f)");
+  c+=`<button class="cd ${p?"pl":""} ${k===date?"sel":""} ${k===today()?"td":""}" style="color:inherit" onclick="date='${k}';render()"><b>${d}</b><small>${p?p.act.split(/[ ·(+]/)[0]:""}</small><span class="dots">${dots.map(x=>`<i style="background:${x}"></i>`).join("")}</span></button>`}
+ const title=new Date(Y,M-1,1).toLocaleDateString("en",{month:"long",year:"numeric"});
+ return `<h1>Calendar</h1><div class="card"><div class="row mb"><button class="chip" onclick="mshift(-1)">‹</button><b>${title}</b><button class="chip" onclick="mshift(1)">›</button></div><div class="cal">${["M","T","W","T","F","S","S"].map(x=>`<div class="dw">${x}</div>`).join("")}${c}</div>
+<div class="mu mt"><span style="color:var(--or)">●</span> training planned · <span style="color:var(--g)">●</span> food logged · <span style="color:var(--w)">●</span> water · ○ Hevy · <span style="color:var(--f)">●</span> weight</div></div>`+dayDetail(date)};
+function dayDetail(d){const p=PLAN[d],t=totals(d),hv=S.hevy.filter(w=>w.date===d),w=waterTot(d),wt=S.weight.find(x=>x.date===d);
+ const dn=new Date(d+"T12:00:00").toLocaleDateString("en",{weekday:"long",month:"long",day:"numeric"});
+ let h=`<div class="card"><h1 style="font-size:20px;margin:0 0 4px">${dn}</h1>`+(p?`<div class="mu">Week ${Math.floor((new Date(d)-new Date("2026-10-14"))/864e5/7)+1} of 4 · Planned: <b style="color:var(--tx)">${esc(p.act)}</b></div>`:`<div class="mu">No planned schedule for this date.</div>`)+`</div>`;
+ if(p){let mp=0,mc=0,mf=0,part=false;const rows=p.meals.map(([s,id])=>{const m=TP[id];if(m[2]==null)part=true;else{mp+=m[2];mc+=m[3];mf+=m[4]}
+  return `<div class="item" style="cursor:default"><div><b>${SL[s]}</b><div class="mu">${esc(m[1])}</div></div><div style="text-align:right;white-space:nowrap">${m[0]==null?"Flexible":m[0]+" kcal"}</div></div>`}).join("");
+  h+=`<details class="card"><summary>Planned meals <span class="mu">· ${p.k} kcal (plan, not intake)</span></summary>${rows}<div class="mu mt">Listed macros: P ${mp} · C ${mc} · F ${mf} g${part?" (partial: some meals have no macros)":""}. Figures are estimates from your calendar document.</div>${p.n?`<div class="mu mt">${esc(p.n)}</div>`:""}</details>`}
+ h+=`<details class="card" open><summary>Logged (actual)</summary><div class="row mt"><span class="big">${r0(t.k)}<span class="u">kcal</span></span><span class="mu">P ${r0(t.p)} · C ${r0(t.c)} · F ${r0(t.f)} g</span></div>${p&&t.n?`<div class="mu">Plan listed ${p.k} kcal; logged is a separate number.</div>`:""}<div class="mu mt">Water ${r0(w)} mL · Weight ${wt?wt.kg+" kg":"not logged"}</div><button class="btn g mt" onclick="tab='food';render()">Open in Food</button></details>`;
+ h+=`<details class="card" ${hv.length?"open":""}><summary>Hevy workout${hv.length?"s":""}</summary>`+(hv.length?hv.map(x=>`<details class="mt"><summary>${esc(x.title)}</summary><div class="mu">${x.time} JST${x.mins!=null?" · "+x.mins+" min":""}${x.vol?" · volume "+r0(x.vol)+" kg":""}</div>${x.ex.map(e=>`<div class="item" style="cursor:default"><div><b>${esc(e.t)}</b>${e.n?`<div class="mu">${esc(e.n)}</div>`:""}</div><div class="mu" style="text-align:right">${e.s.length} sets<br>${e.s.map(s=>(s[0]??"–")+"×"+(s[1]??"BW")).join(", ")}</div></div>`).join("")}</details>`).join(""):`<div class="mu">No Hevy workout for this day${S.hevy.length?"":" (not synced yet; see Settings)"}.</div>`)+`<button class="btn g mt" onclick="syncHevy()">Sync Hevy</button><div class="mu mt">${esc(hs)}</div></details>`;
+ h+=whoopCard(d);
+ return h}
+
+// ---------- WHOOP parsing (reads whatever your Worker returns; nothing invented) ----------
+const jd=x=>new Date(x).toLocaleDateString("sv",{timeZone:"Asia/Tokyo"}),jt=x=>new Date(x).toLocaleString("en-GB",{timeZone:"Asia/Tokyo",month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"});
+function wLeaves(){const out=[];(function w(o,c){if(Array.isArray(o))return o.forEach(x=>w(x,c));if(o&&typeof o==="object"){const n=(o.start||o.created_at||o.end)?o:c;for(const[k,v]of Object.entries(o)){if(v!==null&&typeof v!=="object")out.push({k,v,rec:n});else w(v,n)}}})(S.whoop.data,{});return out}
+function whoopCard(d){let h=`<details class="card"><summary>WHOOP</summary>`;
+ if(!S.whoop)return h+`<div class="mu">Not fetched yet. Add your token in Settings, then tap Check WHOOP.</div><button class="btn g mt" onclick="whoopCheck()">Check WHOOP</button></details>`;
+ const L=wLeaves().filter(x=>x.rec&&(x.rec.end||x.rec.start||x.rec.created_at)&&jd(x.rec.end||x.rec.start||x.rec.created_at)===d&&!x.rec.sport_id&&!x.rec.sport_name);
+ const g=k=>L.find(x=>x.k===k);const row=(l,x,u,f)=>x?`<div class="item" style="cursor:default"><span>${l}</span><b>${f?f(x.v):r1(+x.v)}<span class="u">${u}</span></b></div>`:"";
+ const kj=g("kilojoule"),sp=g("sleep_performance_percentage");
+ const body=row("Recovery",g("recovery_score"),"%")+row("HRV",g("hrv_rmssd_milli"),"ms")+row("Resting HR",g("resting_heart_rate"),"bpm")+row("Sleep performance",sp,"%")+row("Strain",g("strain"),"/ 21")+row("Cycle energy",kj,"kcal",v=>r0(v/4.184));
+ h+=body||`<div class="mu">No WHOOP record for this date in the last response${S.whoop.err?" ("+esc(S.whoop.err)+")":""}.</div>`;
+ if(kj){const r=kj.rec;h+=`<div class="mu mt">Cycle energy (kJ ÷ 4.184) covers ${r.start?jt(r.start):"?"} → ${r.end?jt(r.end):"in progress"} JST. It may be partial and is not a full-day total, so it is not subtracted from your food log.</div>`}
+ h+=`<div class="mu mt">Fetched ${new Date(S.whoop.at).toLocaleString()} (cached until you refresh).</div><details class="mt"><summary>Raw response</summary><pre style="white-space:pre-wrap;word-break:break-word;font-size:11px;color:var(--mu)">${esc(JSON.stringify(S.whoop.status||{}).slice(0,400))}\n${esc(JSON.stringify(S.whoop.data||{}).slice(0,1500))}</pre></details><button class="btn g mt" onclick="whoopCheck()">Refresh WHOOP</button></details>`;return h}
+// ---------- scanners ----------
+const ZX="https://cdn.jsdelivr.net/npm/@zxing/browser@0.1.5/umd/zxing-browser.min.js",TJ="https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js";
+function loadJS(u){return new Promise((ok,no)=>{if(document.querySelector('script[src="'+u+'"]'))return ok();const e=document.createElement("script");e.src=u;e.onload=ok;e.onerror=()=>no(new Error("couldn't load library; check your connection"));document.head.appendChild(e)})}
+let scanCtl=null;function stopScan(){try{scanCtl&&scanCtl.stop()}catch(e){}scanCtl=null}
+const openCustom=pre=>{openCustom0();pre&&Object.entries(pre).forEach(([k,v])=>{const e=document.getElementById(k);if(e&&v!=null&&v!=="")e.value=v})};
+async function openScan(m){sh={meal:m||"Snacks"};openS(`<h1 style="font-size:20px">Scan barcode</h1><div style="position:relative;border-radius:16px;overflow:hidden;background:#000"><video id="vid" playsinline muted style="width:100%;display:block;max-height:45vh;object-fit:cover"></video><div style="position:absolute;inset:28% 8%;border:2px solid var(--or);border-radius:12px"></div></div><div id="sm" class="mu mt">Starting camera…</div><label>Or type the barcode</label><div class="row"><input id="bm" inputmode="numeric" placeholder="4901…"><button class="btn" onclick="lookup(bm.value)">Look up</button></div><label>Or upload a barcode photo</label><input type="file" accept="image/*" onchange="scanFile(this.files[0])">`);
+ try{await loadJS(ZX);const R=new ZXingBrowser.BrowserMultiFormatReader();let done=false;scanCtl=await R.decodeFromConstraints({video:{facingMode:{ideal:"environment"}}},vid,r=>{if(r&&!done){done=true;stopScan();lookup(r.getText())}});sm.textContent="Point the camera at the barcode."}
+ catch(e){sm.textContent=(e&&e.name==="NotAllowedError"?"Camera permission denied. Allow it in Safari settings, or use the options below.":"Live scanning unavailable ("+(e&&e.message)+"). Use the options below.")}}
+async function scanFile(f){if(!f)return;try{await loadJS(ZX);const R=new ZXingBrowser.BrowserMultiFormatReader();const r=await R.decodeFromImageUrl(URL.createObjectURL(f));lookup(r.getText())}catch(e){sm.textContent="No barcode found in that photo. Try a closer, sharper shot."}}
+function offMap(p,code){const n=p.nutriments||{},g=k=>n[k]!=null&&n[k]!==""?+n[k]:null;let k=g("energy-kcal_100g");if(k==null&&g("energy_100g")!=null)k=g("energy_100g")/4.184;
+ let na=g("sodium_100g");na=na!=null?na*1000:(g("salt_100g")!=null?g("salt_100g")*393.4:null);const rd=v=>v==null?null:Math.round(v*10)/10;
+ return{name:p.product_name_ja||p.product_name||"Unknown product",brand:p.brands||"",barcode:String(code),k:rd(k),p:rd(g("proteins_100g")),c:rd(g("carbohydrates_100g")),f:rd(g("fat_100g")),fi:rd(g("fiber_100g")),na:rd(na)}}
+function takeOff(o){if(o.k!=null&&o.p!=null&&o.c!=null&&o.f!=null){const f={...o,id:"c"+uid()};S.custom.push(f);save();pick(f.id)}else{alert("This product's data is incomplete. Missing values are not treated as zero; please complete them from the package.");openCustom({cn:o.name,cb:o.brand,cbc:o.barcode,ck:o.k,cp:o.p,cc:o.c,cf:o.f,cfi:o.fi,cna:o.na})}}
+async function lookup(code){code=(code||"").replace(/\D/g,"");if(code.length<8){try{sm.textContent="Enter at least 8 digits."}catch(e){}return}
+ const loc=S.custom.find(c=>c.barcode===code);if(loc){pick(loc.id);return}
+ try{const r=await fetch("https://world.openfoodfacts.org/api/v2/product/"+code+".json?fields=product_name,product_name_ja,brands,nutriments");const j=await r.json();
+  if(j.status!==1||!j.product){alert("Barcode "+code+" isn't in Open Food Facts. Enter it manually; the barcode will be remembered.");openCustom({cbc:code});return}
+  takeOff(offMap(j.product,code))}catch(e){alert("Couldn't reach Open Food Facts ("+e.message+"). You can enter the product manually.");openCustom({cbc:code})}}
+let ofr=[];
+async function webSearch(){const q=(document.getElementById("q").value||"").trim();const r=document.getElementById("res");if(!q){r.innerHTML=`<div class="empty">Type something to search.</div>`;return}
+ r.innerHTML=`<div class="empty">Searching Open Food Facts…</div>`;
+ try{const j=await(await fetch("https://world.openfoodfacts.org/cgi/search.pl?search_simple=1&action=process&json=1&page_size=20&fields=code,product_name,product_name_ja,brands,nutriments&search_terms="+encodeURIComponent(q))).json();
+  ofr=(j.products||[]).map(p=>offMap(p,p.code)).filter(o=>o.name&&o.k!=null);
+  r.innerHTML=ofr.length?ofr.map((o,i)=>`<div class="item" onclick="takeOff(ofr[${i}])"><div><b>${esc(o.name)}</b><div class="mu">${esc(o.brand)} · Open Food Facts (community data)</div></div><div style="text-align:right"><b>${r0(o.k)}</b><span class="u">kcal/100 g</span></div></div>`).join(""):`<div class="empty">No online results for “${esc(q)}”. Create it as a custom food.</div>`}
+ catch(e){r.innerHTML=`<div class="empty">Online search failed (${esc(e.message)}). Local results are still available.<br><button class="chip mt" onclick="webSearch()">Retry</button></div>`}}
+function openLabel(m){sh={meal:m||"Snacks"};openS(`<h1 style="font-size:20px">Scan nutrition label</h1><div class="mu">Photograph the nutrition table flat and sharp (Japanese or English). The first scan downloads language data (~15 MB), so use Wi-Fi. You will review every value before saving.</div><input type="file" accept="image/*" class="mt" onchange="runOCR(this.files[0])"><div id="om" class="mu mt"></div>`)}
+async function runOCR(f){if(!f)return;om.textContent="Loading text recognition…";try{await loadJS(TJ);const r=await Tesseract.recognize(f,"jpn+eng",{logger:m=>{om.textContent=m.status+" "+Math.round((m.progress||0)*100)+"%"}});reviewLabel(r.data.text)}catch(e){om.textContent="Recognition failed: "+e.message+". You can enter the values manually with + Custom."}}
+function parseLabel(raw){const t=raw.normalize("NFKC").replace(/([\u3000-\u9fff])[ \t]+(?=[\u3000-\u9fff])/g,"$1").replace(/(\d),(\d)/g,"$1.$2");
+ const N="[^\\d\\n]{0,8}?(\\d+(?:\\.\\d+)?)\\s*(kcal|kj|mg|g)?";const f=re=>{const m=t.match(new RegExp(re+N,"i"));return m?{v:parseFloat(m[1]),u:(m[2]||"").toLowerCase()}:null};
+ const e=f("(?:エネルギー|熱量|energy|calories)"),o={};o.k=e?(e.u==="kj"?e.v/4.184:e.v):null;
+ o.p=f("(?:たんぱく質|タンパク質|蛋白質|protein)"),o.c=f("(?:炭水化物|carbohydrate)"),o.f=f("(?:脂質|total fat|(?<!saturated )fat)"),o.fi=f("(?:食物繊維|dietary fiber|fibre|fiber)");
+ const na=f("(?:ナトリウム|sodium)"),salt=f("(?:食塩相当量|salt equivalent|salt)");let nav=null,note="";
+ if(na)nav=na.u==="g"?na.v*1000:na.v;else if(salt){nav=salt.v*393.4;note="Sodium converted from salt equivalent × 393.4."}
+ const sv=t.match(/1\s*(?:食|包装|個|袋)\s*(?:分)?\s*[（(]?\s*(?:約)?\s*(\d+(?:\.\d+)?)\s*(?:g|ml)/i),p100=/100\s*(?:g|ml)\s*(?:当|あたり|per)|per\s*100/i.test(t);
+ const val=x=>x==null?null:(typeof x==="number"?x:x.v);return{k:o.k,p:val(o.p),c:val(o.c),f:val(o.f),fi:val(o.fi),na:nav,note,serving:sv?+sv[1]:null,p100}}
+function reviewLabel(raw){const L=parseLabel(raw),v=x=>x==null?"":Math.round(x*10)/10,nf=x=>x==null?`<span style="color:var(--c)">not found</span>`:`<span class="ok">detected</span>`;
+ openS(`<h1 style="font-size:20px">Review label</h1><div class="mu">Check each number against the package. Blank = not found (not zero). Enter 0 if the label says 0.</div><label>Name</label><input id="ln"><label>Barcode (optional)</label><input id="lb" inputmode="numeric"><label>Values on the label are</label><select id="lbs" onchange="lsg.style.display=this.value=='s'?'block':'none'"><option value="100" ${L.p100||!L.serving?"selected":""}>per 100 g / 100 mL</option><option value="s" ${!L.p100&&L.serving?"selected":""}>per serving</option></select><div id="lsg" style="display:${!L.p100&&L.serving?"block":"none"}"><label>Serving size (g or mL)</label><input id="lsv" type="number" inputmode="decimal" value="${L.serving||""}"></div>
+<div class="g2"><div><label>kcal ${nf(L.k)}</label><input id="lk" type="number" inputmode="decimal" value="${v(L.k)}"></div><div><label>Protein g ${nf(L.p)}</label><input id="lp" type="number" inputmode="decimal" value="${v(L.p)}"></div><div><label>Carbs g ${nf(L.c)}</label><input id="lc" type="number" inputmode="decimal" value="${v(L.c)}"></div><div><label>Fat g ${nf(L.f)}</label><input id="lf" type="number" inputmode="decimal" value="${v(L.f)}"></div><div><label>Fiber g ${nf(L.fi)}</label><input id="lfi" type="number" inputmode="decimal" value="${v(L.fi)}"></div><div><label>Sodium mg ${nf(L.na)}</label><input id="lna" type="number" inputmode="decimal" value="${v(L.na)}"></div></div><div class="mu mt">${L.note}</div>
+<button class="btn mt" style="width:100%" onclick="saveLabel()">Save food</button><details class="mt"><summary>Recognized text</summary><pre style="white-space:pre-wrap;font-size:11px;color:var(--mu)">${esc(raw)}</pre></details>`)}
+function saveLabel(){const n=ln.value.trim(),num=el=>el.value===""?null:parseFloat(el.value);let sc=1;
+ if(lbs.value==="s"){const g=parseFloat(lsv.value);if(!(g>0))return alert("Enter the serving size.");sc=100/g}
+ const k=num(lk),p=num(lp),c=num(lc),f=num(lf);if(!n||k==null||p==null||c==null||f==null)return alert("Name, kcal, protein, carbs and fat are required (enter 0 if the label says 0).");
+ const sx=x=>x==null?null:Math.round(x*sc*10)/10;if(sx(k)>900&&!confirm("That's over 900 kcal per 100 g. Is that right?"))return;
+ const o={id:"c"+uid(),name:n,brand:"",barcode:lb.value.replace(/\D/g,""),k:sx(k),p:sx(p),c:sx(c),f:sx(f),fi:sx(num(lfi)),na:sx(num(lna))};S.custom.push(o);save();pick(o.id)}
+// ---------- shell ----------
+const ICONS={home:'<path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',food:'<path d="M7 3v8M4 3v5a3 3 0 0 0 6 0V3M7 11v10M17 21V3c-2.5 1.5-3 5-3 8h3"/>',water:'<path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/>',progress:'<path d="M3 17l6-6 4 4 8-8M15 7h6v6"/>',calendar:'<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18"/>',settings:'<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/>'};
+function render(){const sy=app.scrollTop;app.innerHTML=V[tab]();
+ nav.innerHTML=Object.keys(ICONS).map(k=>`<button class="${k==tab?"on":""}" onclick="tab='${k}';render();app.scrollTop=0" aria-label="${k}"><svg viewBox="0 0 24 24">${ICONS[k]}</svg>${k[0].toUpperCase()+k.slice(1)}</button>`).join("");app.scrollTop=sy}
+render();if(S.cfg.token){syncHevy();whoopCheck()}
+</script></body></html>
